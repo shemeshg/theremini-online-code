@@ -33,7 +33,7 @@
       <p>
         <label class="w3-text-grey">MIDI IN  - Select "Moog theremini"</label>
           <select v-model="midiInput" class="w3-select w3-teal" >
-            <option v-for="option in midiInputs" v-bind:value="option.id">
+            <option v-for="option in midiInputs" v-bind:value="option.id" v-bind:key="option.id">
               {{ option.name }}
             </option>
           </select>        
@@ -42,7 +42,7 @@
       <p>
         <label class="w3-text-grey">MIDI OUT - 'IAC Driver Bus' or hardware</label>
         <select v-model="midiOutput" class="w3-select w3-teal">
-            <option v-for="option in midiOutputs" v-bind:value="option.id">
+            <option v-for="option in midiOutputs" v-bind:value="option.id" v-bind:key="option.id">
               {{ option.name }}
             </option>
         </select>        
@@ -301,7 +301,7 @@
 
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { Component, Vue } from "vue-property-decorator";
 import { MidiCcToNote } from "../bl/midiCcToNote";
 import { midiThereminSliders } from '../bl//midiSlider'
 
@@ -327,10 +327,10 @@ const noInterfaceSelected = {
 export default class HelloWorld extends Vue {
 
   
-  msgConnected: string = "";
-  msgRouted:string = "";
+  msgConnected = "";
+  msgRouted  = "";
   
-  jsonSequence:string = JSON.stringify([ ["C4","E4"],0,"D4","E4"])
+  jsonSequence: string = JSON.stringify([ ["C4","E4"],0,"D4","E4"])
   seqModIsActive = false;
   isVcvMode = false;
   isRepeatSequence = true
@@ -348,7 +348,7 @@ export default class HelloWorld extends Vue {
   ccpitchPositiveSendToMinVal = "1"
   ccpitchPositiveSendToMaxVal = "127"
 
-  playingNotes: any[] = []
+  playingNotes: unknown[] = []
 
   midiOutputs: { id: number; name: string }[] = [noInterfaceSelected];
   midiOutput: number = noInterfaceSelectedId;
@@ -421,8 +421,8 @@ export default class HelloWorld extends Vue {
     
     midiThereminSliders.midiVolumeSlider.sendToCcChannel = Number( this.volumeSendToCcChannel)
 
-    let volumeStartCcPosition = Number( this.volumeStartCcPosition )
-    let volumeEndCcPosition =  Number( this.volumeEndCcPosition )
+    const volumeStartCcPosition = Number( this.volumeStartCcPosition )
+    const volumeEndCcPosition =  Number( this.volumeEndCcPosition )
     if (volumeEndCcPosition < volumeStartCcPosition) {
       midiThereminSliders.midiVolumeSlider.startCcPosition = volumeEndCcPosition 
       midiThereminSliders.midiVolumeSlider.endCcPosition = volumeStartCcPosition
@@ -447,8 +447,8 @@ export default class HelloWorld extends Vue {
     midiThereminSliders.midiPitchSlider.midiStartNote = Number( this.pitchMidiStartNote )
     midiThereminSliders.midiPitchSlider.midiEndNote = Number( this.pitchMidiEndNote )
     
-    let pitchStartCcPosition = Number( this.pitchStartCcPosition )
-    let pitchEndCcPosition =  Number( this.pitchEndCcPosition )
+    const pitchStartCcPosition = Number( this.pitchStartCcPosition )
+    const pitchEndCcPosition =  Number( this.pitchEndCcPosition )
     if (pitchEndCcPosition < pitchStartCcPosition) {
       midiThereminSliders.midiPitchSlider.startCcPosition = pitchEndCcPosition 
       midiThereminSliders.midiPitchSlider.endCcPosition = pitchStartCcPosition
@@ -477,7 +477,7 @@ export default class HelloWorld extends Vue {
   }
 
   doPlayMidiSliderByBand(): void{
-    let pitchBendPosition = midiThereminSliders.midiPitchSlider.getPitchBendPosition(Number(this.midiSliderPosition))
+    const pitchBendPosition = midiThereminSliders.midiPitchSlider.getPitchBendPosition(Number(this.midiSliderPosition))
     MidiCcToNote.sendPitchBend(this.midiOutput, pitchBendPosition, undefined)
 
   }
